@@ -26,7 +26,7 @@ describe('Checking Route /login', () => {
   });
 
   it('User login is successful', async () => {
-    sinon.stub(UserModel, 'findOne').resolves(userMock as unknown as UserModel);
+    sinon.stub(UserModel, 'findOne').resolves(userMock as unknown  as UserModel);
 
     const response = await chai.request(app).post('/login').send(loginInfoTest);
 

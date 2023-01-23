@@ -1,8 +1,13 @@
-// import * as jsonwebtoken from 'jsonwebtoken';
-// import IUser from '../interfaces/IUser';
+import * as jsonwebtoken from 'jsonwebtoken';
+import ILogin from '../interfaces/ILogin';
 
-// require('dotenv/config');
+const jwtConfig: object = {
+  algorithm: 'HS256',
+  expiresIn: '7d',
+};
 
-// export default function generateToken(user: IUser) {
-//   const { email, password } = user;
-// }
+export default function generateToken(user: ILogin) {
+  const { email } = user;
+  const secret = process.env.JWT_SECRET as string;
+  return jsonwebtoken.sign({ email }, secret, jwtConfig);
+}

@@ -1,11 +1,11 @@
+import ILogin from './ILogin';
+
 type role = 'admin' | 'user';
 
-export default interface IUser {
+export default interface IUser extends ILogin {
   id: number;
   username: string;
-  email: string;
   role: role;
-  password: string;
 }
 
 export { role };
