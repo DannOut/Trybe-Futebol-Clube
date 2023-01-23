@@ -38,7 +38,8 @@ Matches.init(
   },
   {
     sequelize,
-    modelName: 'Matches',
+    modelName: 'matches',
+    tableName: 'matches',
     underscored: true,
     timestamps: false,
   },

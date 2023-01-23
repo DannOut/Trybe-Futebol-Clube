@@ -38,8 +38,8 @@ User.init(
     },
   },
   {
-    modelName: 'User',
-    // tableName: 'users',
+    modelName: 'users',
+    tableName: 'users',
     sequelize,
     underscored: true,
     timestamps: false,
