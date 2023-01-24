@@ -7,7 +7,7 @@ export default class UserController {
   login = async (req: Request, res: Response, next: NextFunction) => {
     try {
       const token = await this._userService.login(req.body);
-      console.log('token :>> ', token);
+      // console.log('token :>> ', token);
       res.status(200).json({ token });
     } catch (e) {
       next(e);
