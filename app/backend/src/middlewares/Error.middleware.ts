@@ -9,6 +9,7 @@ const errorMiddleware: ErrorRequestHandler = (
   res: Response,
   _Next: NextFunction,
 ) => {
+  //* refatorado com ajuda do vinicius e instrutor danilo
   if (error instanceof ErrorHandler) {
     return res.status(error.status).json({ message: error.message });
   }
