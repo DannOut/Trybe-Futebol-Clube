@@ -5,6 +5,7 @@ import generateToken from '../utils/AuthService';
 import IUserService from '../interfaces/IUserService';
 import ErrorHandler from '../utils/ErrorHandler';
 import { incorrectEmailOrPassword } from '../utils/ErrorInfoFile';
+import IUser from '../interfaces/IUser';
 
 export default class UserService implements IUserService {
   constructor(private _userModel = User) {}
@@ -17,6 +18,15 @@ export default class UserService implements IUserService {
       const newToken = generateToken(body);
       return newToken;
     }
+    const { status, message } = incorrectEmailOrPassword;
+    throw new ErrorHandler(status, message);
+  };
+
+  getRole = async (user: IUser): Promise<Partial<IUser> | void> => {
+    const userExists = await this._userModel.findOne({
+      where: { email: user.email },
+    });
+    if (userExists) return { role: userExists.role };
     const { status, message } = incorrectEmailOrPassword;
     throw new ErrorHandler(status, message);
   };
