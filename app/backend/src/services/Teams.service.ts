@@ -2,6 +2,7 @@
 
 import ITeams from '../interfaces/ITeams';
 import Teams from '../database/models/Teams';
+import ErrorHandler from '../utils/ErrorHandler';
 
 export default class TeamsService {
   constructor(private _teamsModel = Teams) {}
@@ -13,7 +14,7 @@ export default class TeamsService {
 
   getById = async (id: number): Promise<ITeams | void> => {
     const team = await this._teamsModel.findByPk(id);
-    console.log('team :>> ', team);
     if (team) return team;
+    throw new ErrorHandler(401, 'Team not Found');
   };
 }

@@ -7,6 +7,7 @@ import {
   failedAuthLogin,
   invalidToken,
   missingInfoLogin,
+  successAuthLogin,
   validToken,
 } from './mocks/user.mock';
 import { App } from '../app';
@@ -19,11 +20,6 @@ chai.use(chaiHttp);
 
 const { app } = new App();
 const { expect } = chai;
-
-const loginInfoTest = {
-  email: 'user@user.com',
-  password: 'secret_user',
-};
 
 describe('Checking Route /login', () => {
   let chaiHttpResponse: Response;
@@ -42,7 +38,7 @@ describe('Checking Route /login', () => {
     const chaiHttpResponse = await chai
       .request(app)
       .post('/login')
-      .send(loginInfoTest);
+      .send(successAuthLogin);
 
     expect(chaiHttpResponse.status).to.be.equal(200);
     expect(chaiHttpResponse.body).to.be.deep.equal({ token: validToken });
