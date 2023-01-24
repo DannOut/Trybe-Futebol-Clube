@@ -1,10 +1,11 @@
-export default class HandleError extends Error {
-  private _status: number;
-  private _message: string;
+export default class ErrorHandler extends Error {
+  //* https://javascript.info/custom-errors
+  status: number;
+  message: string;
 
   constructor(status: number, message: string) {
     super(message);
-    this._status = status;
-    this._message = message;
+    this.status = status;
+    this.message = message;
   }
 }

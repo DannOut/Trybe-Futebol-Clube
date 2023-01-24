@@ -3,7 +3,7 @@ import ILogin from '../interfaces/ILogin';
 import User from '../database/models/User';
 import generateToken from '../utils/AuthService';
 import IUserService from '../interfaces/IUserService';
-import HandleError from '../utils/ErrorHandler';
+import ErrorHandler from '../utils/ErrorHandler';
 import { incorrectEmailOrPassword } from '../utils/ErrorInfoFile';
 
 export default class UserService implements IUserService {
@@ -17,7 +17,8 @@ export default class UserService implements IUserService {
       const newToken = generateToken(body);
       return newToken;
     }
-    const { status, message } = incorrectEmailOrPassword;
-    throw new HandleError(status, message);
+    const { message } = incorrectEmailOrPassword;
+    console.log('cheguei aqui');
+    throw new ErrorHandler(401, message);
   };
 }
