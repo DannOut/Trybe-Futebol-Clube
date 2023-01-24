@@ -14,6 +14,7 @@ export default (req: Request, res: Response, next: NextFunction) => {
     // Manobra evasiva do zambelli
     req.body.user = payload;
   } catch (error) {
+    console.log('ERROR', error);
     return res.status(401).json({ message: 'Token must be a valid token' });
   }
 

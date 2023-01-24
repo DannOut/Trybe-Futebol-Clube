@@ -71,6 +71,7 @@ describe('Checking Route /login', () => {
       message: incorrectEmailOrPassword.message,
     });
   });
+
   it('User without a valid token', async () => {
     sinon
       .stub(UserModel, 'findOne')
@@ -88,20 +89,36 @@ describe('Checking Route /login', () => {
     });
   });
 
-  it.skip('User with a valid token', async () => {
-    sinon
-      .stub(UserModel, 'findOne')
-      .resolves(completeUser as unknown as UserModel);
-    sinon.stub(jwt, 'verify').resolves(validToken);
+  it.skip('User with a invalid token', async () => {
+    sinon.stub(UserModel, 'findOne').resolves(completeUser as UserModel);
+    //TODO VERIFICAR COMO FAZ O STUB DO JSON WEB TOKEN
+    // sinon.stub(jwt, 'verify').resolves();
 
     const chaiHttpResponse = await chai
       .request(app)
       .get('/login/validate')
-      .send();
+      .set({ authorization: invalidToken });
 
-    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.status).to.be.equal(401);
     expect(chaiHttpResponse.body).to.be.deep.equal({
-      message: 'Token not found',
+      message: 'Token must be a valid token',
+    });
+
+    it('User with a valid token', async () => {
+      sinon
+        .stub(UserModel, 'findOne')
+        .resolves(completeUser as unknown as UserModel);
+      sinon.stub(jwt, 'verify').resolves(validToken);
+
+      const chaiHttpResponse = await chai
+        .request(app)
+        .get('/login/validate')
+        .set({ authorization: validToken });
+
+      expect(chaiHttpResponse.status).to.be.equal(200);
+      expect(chaiHttpResponse.body).to.be.deep.equal({
+        role: 'user',
+      });
     });
   });
 });
