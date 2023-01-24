@@ -17,8 +17,8 @@ export default class UserService implements IUserService {
       const newToken = generateToken(body);
       return newToken;
     }
-    const { message } = incorrectEmailOrPassword;
+    const { status, message } = incorrectEmailOrPassword;
     console.log('cheguei aqui');
-    throw new ErrorHandler(401, message);
+    throw new ErrorHandler(status, message);
   };
 }
