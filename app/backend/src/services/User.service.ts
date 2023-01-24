@@ -18,7 +18,6 @@ export default class UserService implements IUserService {
       return newToken;
     }
     const { status, message } = incorrectEmailOrPassword;
-    // console.log('cheguei aqui');
     throw new ErrorHandler(status, message);
   };
 }

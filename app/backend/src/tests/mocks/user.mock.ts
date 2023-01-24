@@ -19,3 +19,14 @@ const successAuthLogin = {
   email: 'user@user.com',
   password: 'secret_user',
 };
+
+const token =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InVzZXJAdXNlci5jb20iLCJpYXQiOjE2NzQ1NjM2MzMsImV4cCI6MTY3NTE2ODQzM30.6EuUWStOforWnvG82oXqPM5PYR56xf-pjvDOHyL9Pwc';
+
+export {
+  completeUser,
+  failedAuthLogin,
+  missingInfoLogin,
+  successAuthLogin,
+  token,
+};

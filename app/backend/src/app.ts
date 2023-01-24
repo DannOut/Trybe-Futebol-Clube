@@ -1,4 +1,5 @@
 import * as express from 'express';
+import 'express-async-errors';
 import errorMiddleware from './middlewares/Error.middleware';
 import userRouter from './routes/User.route';
 
@@ -10,10 +11,10 @@ class App {
 
     this.config();
 
-    this.app.use('/login', userRouter);
-
     // Não remover essa rota
     this.app.get('/', (req, res) => res.json({ ok: true }));
+    this.app.use('/login', userRouter);
+
     this.app.use(errorMiddleware);
   }
 
