@@ -3,6 +3,7 @@ import Matches from '../database/models/Matches';
 import Teams from '../database/models/Teams';
 import { sameTeamError, teamIdNotFound } from '../utils/ErrorInfoFile';
 import ErrorHandler from '../utils/ErrorHandler';
+import IGoalsToUpdate from '../interfaces/IGoalsToUpdate';
 
 export default class MatchesService {
   constructor(private _matchesModel = Matches, private _teamsModel = Teams) {}
@@ -50,15 +51,8 @@ export default class MatchesService {
       const { status, message } = sameTeamError;
       throw new ErrorHandler(status, message);
     }
-    const homeTeamCheck = await this._teamsModel.findByPk(homeTeamId);
-    const awayTeamCheck = await this._teamsModel.findByPk(awayTeamId);
 
-    if (!homeTeamCheck || !awayTeamCheck) {
-      const { status, message } = teamIdNotFound;
-      throw new ErrorHandler(status, message);
-    }
-    //! Verificar o porque não funciona do modo abaixo
-    // this.checkTeamsInDB(+match.homeTeamId, +match.awayTeamId);
+    await this.checkTeamsInDB(+match.homeTeamId, +match.awayTeamId);
     const matchInserted = await this._matchesModel.create({
       ...match,
       inProgress: true,
@@ -66,17 +60,28 @@ export default class MatchesService {
     return matchInserted;
   };
 
+  async checkTeamsInDB(homeTeam: number, awayTeam: number): Promise<boolean> {
+    const homeTeamCheck = await this._teamsModel.findByPk(homeTeam);
+    const awaitTeamCheck = await this._teamsModel.findByPk(awayTeam);
+    if (homeTeamCheck && awaitTeamCheck) {
+      return true;
+    }
+    const { status, message } = teamIdNotFound;
+    throw new ErrorHandler(status, message);
+  }
+
   finishedMatch = async (id: number): Promise<void> => {
     await this._matchesModel.update({ inProgress: false }, { where: { id } });
   };
 
-  // async checkTeamsInDB(homeTeam: number, awayTeam: number): Promise<boolean> {
-  //   const homeTeamCheck = await this._teamsModel.findByPk(homeTeam);
-  //   const awaitTeamCheck = await this._teamsModel.findByPk(awayTeam);
-  //   if (homeTeamCheck && awaitTeamCheck) {
-  //     return true;
-  //   }
-  //   const { status, message } = teamIdNotFound;
-  //   throw new ErrorHandler(status, message);
-  // }
+  //  prettier-ignore
+  updateGoals = async (id: number, goalsToUpdate: IGoalsToUpdate) => {
+    await this._matchesModel.update(
+      {
+        homeTeamGoals: goalsToUpdate.homeTeamGoals,
+        awayTeamGoals: goalsToUpdate.awayTeamGoals,
+      },
+      { where: { id } },
+    );
+  };
 }

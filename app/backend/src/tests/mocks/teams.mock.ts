@@ -13,9 +13,14 @@ const arrayTeamsMock = [
   },
 ];
 
-const oneTeamMock = {
+const homeTeamMock = {
   id: 3,
-  teamName: 'Botafogo',
+  teamName: 'Vasco',
 };
 
-export { arrayTeamsMock, oneTeamMock };
+const awayTeamMock = {
+  id: 1,
+  teamName: 'Flamengo',
+};
+
+export { arrayTeamsMock, homeTeamMock, awayTeamMock };

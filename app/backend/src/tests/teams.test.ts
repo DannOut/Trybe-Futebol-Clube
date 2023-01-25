@@ -6,7 +6,7 @@ import chaiHttp = require('chai-http');
 import { App } from '../app';
 import TeamsModel from '../database/models/Teams';
 import { Response } from 'superagent';
-import { arrayTeamsMock, oneTeamMock } from './mocks/teams.mock';
+import { arrayTeamsMock, homeTeamMock } from './mocks/teams.mock';
 
 chai.use(chaiHttp);
 
@@ -30,12 +30,12 @@ describe('Checking Route /teams', () => {
   });
 
   it('Get return one team', async () => {
-    sinon.stub(TeamsModel, 'findByPk').resolves(oneTeamMock as TeamsModel);
+    sinon.stub(TeamsModel, 'findByPk').resolves(homeTeamMock as TeamsModel);
 
     const chaiHttpResponse = await chai.request(app).get('/teams/3');
 
     expect(chaiHttpResponse.status).to.be.equal(200);
-    expect(chaiHttpResponse.body).to.be.deep.equal(oneTeamMock);
+    expect(chaiHttpResponse.body).to.be.deep.equal(homeTeamMock);
   });
 
   it('Team not found', async () => {
