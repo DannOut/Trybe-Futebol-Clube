@@ -21,4 +21,9 @@ export default class MatchesController {
     const matchToInsert = await this._matchesService.insertMatch(req.body);
     return res.status(201).json(matchToInsert);
   };
+
+  finishedMatch = async (req: Request, res: Response) => {
+    await this._matchesService.finishedMatch(+req.params.id);
+    return res.status(200).json({ message: 'Finished' });
+  };
 }

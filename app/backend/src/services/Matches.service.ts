@@ -57,14 +57,17 @@ export default class MatchesService {
       const { status, message } = teamIdNotFound;
       throw new ErrorHandler(status, message);
     }
-
+    //! Verificar o porque não funciona do modo abaixo
     // this.checkTeamsInDB(+match.homeTeamId, +match.awayTeamId);
-
     const matchInserted = await this._matchesModel.create({
       ...match,
       inProgress: true,
     });
     return matchInserted;
+  };
+
+  finishedMatch = async (id: number): Promise<void> => {
+    await this._matchesModel.update({ inProgress: false }, { where: { id } });
   };
 
   // async checkTeamsInDB(homeTeam: number, awayTeam: number): Promise<boolean> {
