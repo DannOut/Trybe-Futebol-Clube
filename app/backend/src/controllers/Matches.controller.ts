@@ -7,6 +7,7 @@ export default class MatchesController {
   getAll = async (req: Request, res: Response) => {
     if (req.query.inProgress) {
       const progress = req.query.inProgress === 'true';
+      // prettier-ignore
       const matchesFiltered = await this._matchesService.matchesInProgress(
         progress as unknown as boolean,
       );
@@ -14,5 +15,10 @@ export default class MatchesController {
     }
     const allMatches = await this._matchesService.getAll();
     return res.status(200).json(allMatches);
+  };
+
+  insertMatch = async (req: Request, res: Response) => {
+    const matchToInsert = await this._matchesService.insertMatch(req.body);
+    return res.status(201).json(matchToInsert);
   };
 }
