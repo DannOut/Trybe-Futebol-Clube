@@ -184,9 +184,33 @@ const matchCreated = {
   inProgress: true,
 };
 
+const bodyToCreate = {
+  homeTeamId: 2,
+  awayTeamId: 3,
+  homeTeamGoals: 4,
+  awayTeamGoals: 5,
+};
+
+const sameTeamMock = {
+  homeTeamId: 2,
+  awayTeamId: 2,
+  homeTeamGoals: 2,
+  awayTeamGoals: 2,
+};
+
+const invalidTeamMock = {
+  homeTeamId: 9999,
+  awayTeamId: 9999,
+  homeTeamGoals: 2,
+  awayTeamGoals: 2,
+};
+
 export {
   arrayMatchesMock,
   arrayInProgressMatchesMock,
   arrayFinishedMatches,
+  bodyToCreate,
   matchCreated,
+  sameTeamMock,
+  invalidTeamMock,
 };

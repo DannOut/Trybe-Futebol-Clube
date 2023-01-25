@@ -6,16 +6,18 @@ import { App } from '../app';
 import { Response } from 'superagent';
 import MatchesModel from '../database/models/Matches';
 import TeamsModel from '../database/models/Teams';
-import MatchesService from '../services/Matches.service';
 import {
   arrayInProgressMatchesMock,
   arrayMatchesMock,
+  bodyToCreate,
+  invalidTeamMock,
   matchCreated,
+  sameTeamMock,
 } from './mocks/matches.mock';
 import * as jwt from 'jsonwebtoken';
-import { successAuthLogin } from './mocks/user.mock';
 import { homeTeamMock, awayTeamMock } from './mocks/teams.mock';
-import IMatches from '../interfaces/IMatches';
+import { invalidToken } from './mocks/user.mock';
+import { sameTeamError, teamIdNotFound } from '../utils/ErrorInfoFile';
 
 chai.use(chaiHttp);
 const { app } = new App();
@@ -67,15 +69,57 @@ describe('Checking Route /matches', () => {
     const chaiHttpResponse = await chai
       .request(app)
       .post('/matches')
-      .send({
-        homeTeamId: 2,
-        awayTeamId: 3,
-        homeTeamGoals: 4,
-        awayTeamGoals: 5,
-      })
+      .send(bodyToCreate)
       .set('authorization', 'Token Authorized');
 
     expect(chaiHttpResponse.status).to.be.equal(201);
     expect(chaiHttpResponse.body).to.be.deep.equal(matchCreated);
+  });
+
+  it.skip("it's not possible to insert without a validation token", async () => {
+    sinon.stub(jwt, 'verify').throws(Error);
+    const chaiHttpResponse = await chai
+      .request(app)
+      .post('/matches')
+      .set({ authorization: invalidToken });
+
+    expect(chaiHttpResponse.status).to.be.equal(401);
+    expect(chaiHttpResponse.body).to.be.deep.equal({
+      message: 'Token must be a valid token',
+    });
+  });
+
+  it.skip("it's not possible to insert match with the same team two times", async () => {
+    sinon
+      .stub(jwt, 'verify')
+      .resolves({ email: 'admin@admin.com', password: 'secret_admin' });
+
+    const chaiHttpResponse = await chai
+      .request(app)
+      .post('/matches')
+      .send(sameTeamMock)
+      .set('authorization', 'Token Authorized');
+
+    expect(chaiHttpResponse.status).to.be.equal(sameTeamError.status);
+    expect(chaiHttpResponse.body).to.be.deep.equal({
+      message: sameTeamError.message,
+    });
+  });
+
+  it.skip("it's not possible to insert match with team id invalid", async () => {
+    sinon
+      .stub(jwt, 'verify')
+      .resolves({ email: 'admin@admin.com', password: 'secret_admin' });
+
+    const chaiHttpResponse = await chai
+      .request(app)
+      .post('/matches')
+      .send(invalidTeamMock)
+      .set('authorization', 'Token Authorized');
+
+    expect(chaiHttpResponse.status).to.be.equal(teamIdNotFound.status);
+    expect(chaiHttpResponse.body).to.be.deep.equal({
+      message: teamIdNotFound.message,
+    });
   });
 });
