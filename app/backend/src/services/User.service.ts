@@ -2,12 +2,11 @@ import * as bycrypt from 'bcryptjs';
 import ILogin from '../interfaces/ILogin';
 import User from '../database/models/User';
 import generateToken from '../utils/AuthService';
-import IUserService from '../interfaces/IUserService';
 import ErrorHandler from '../utils/ErrorHandler';
 import { incorrectEmailOrPassword } from '../utils/ErrorInfoFile';
 import IUser from '../interfaces/IUser';
 
-export default class UserService implements IUserService {
+export default class UserService {
   constructor(private _userModel = User) {}
 
   login = async (body: ILogin): Promise<string | void> => {
