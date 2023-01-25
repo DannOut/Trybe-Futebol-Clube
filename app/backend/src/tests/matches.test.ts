@@ -52,13 +52,10 @@ describe('Checking Route /matches', () => {
     expect(chaiHttpResponse.body).to.be.deep.equal(arrayInProgressMatchesMock);
   });
 
-  it.only('user can insert a new match', async () => {
+  it('user can insert a new match', async () => {
     sinon
       .stub(jwt, 'verify')
       .resolves({ email: 'admin@admin.com', password: 'secret_admin' });
-    // sinon
-    //   .stub(MatchesService.prototype, 'insertMatch')
-    //   .resolves(matchCreated as any);
     sinon
       .stub(TeamsModel, 'findByPk')
       .onFirstCall()
@@ -76,7 +73,7 @@ describe('Checking Route /matches', () => {
         homeTeamGoals: 4,
         awayTeamGoals: 5,
       })
-      .set('authorization', 'hkjsjhkjashsjda');
+      .set('authorization', 'Token Authorized');
 
     expect(chaiHttpResponse.status).to.be.equal(201);
     expect(chaiHttpResponse.body).to.be.deep.equal(matchCreated);
