@@ -200,7 +200,7 @@ const sameTeamMock = {
 
 const invalidTeamMock = {
   homeTeamId: 9999,
-  awayTeamId: 9999,
+  awayTeamId: 9998,
   homeTeamGoals: 2,
   awayTeamGoals: 2,
 };

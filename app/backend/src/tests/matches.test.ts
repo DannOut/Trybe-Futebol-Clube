@@ -76,7 +76,7 @@ describe('Checking Route /matches', () => {
     expect(chaiHttpResponse.body).to.be.deep.equal(matchCreated);
   });
 
-  it.skip("it's not possible to insert without a validation token", async () => {
+  it("'s not possible to insert without a validation token", async () => {
     sinon.stub(jwt, 'verify').throws(Error);
     const chaiHttpResponse = await chai
       .request(app)
@@ -89,7 +89,7 @@ describe('Checking Route /matches', () => {
     });
   });
 
-  it.skip("it's not possible to insert match with the same team two times", async () => {
+  it("'s not possible to insert match with the same team two times", async () => {
     sinon
       .stub(jwt, 'verify')
       .resolves({ email: 'admin@admin.com', password: 'secret_admin' });
@@ -106,7 +106,7 @@ describe('Checking Route /matches', () => {
     });
   });
 
-  it.skip("it's not possible to insert match with team id invalid", async () => {
+  it("'s not possible to insert match with team id invalid", async () => {
     sinon
       .stub(jwt, 'verify')
       .resolves({ email: 'admin@admin.com', password: 'secret_admin' });
@@ -120,6 +120,29 @@ describe('Checking Route /matches', () => {
     expect(chaiHttpResponse.status).to.be.equal(teamIdNotFound.status);
     expect(chaiHttpResponse.body).to.be.deep.equal({
       message: teamIdNotFound.message,
+    });
+  });
+
+  it('returns message "Finished" with status 200', async () => {
+    sinon.stub(MatchesModel, 'update').resolves();
+
+    const chaiHttpResponse = await chai.request(app).patch('/matches/1/finish');
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.deep.equal({ message: 'Finished' });
+  });
+
+  it('updates goals of a match', async () => {
+    sinon.stub(MatchesModel, 'update').resolves();
+
+    const chaiHttpResponse = await chai.request(app).patch('/matches/1').send({
+      homeTeamGoals: 5,
+      awayTeamGoals: 3,
+    });
+
+    expect(chaiHttpResponse.status).to.be.equal(200);
+    expect(chaiHttpResponse.body).to.be.deep.equal({
+      message: 'Match 1 was updated successfully!',
     });
   });
 });
