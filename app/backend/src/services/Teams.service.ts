@@ -5,16 +5,16 @@ import Teams from '../database/models/Teams';
 import ErrorHandler from '../utils/ErrorHandler';
 
 export default class TeamsService {
-  constructor(private _teamsModel = Teams) {}
+  // constructor(private _teamsModel = Teams) {}
 
-  getAll = async (): Promise<ITeams[] | void> => {
-    const teams = await this._teamsModel.findAll();
+  static async getAll(): Promise<ITeams[] | void> {
+    const teams = await Teams.findAll();
     return teams;
-  };
+  }
 
-  getById = async (id: number): Promise<ITeams | void> => {
-    const team = await this._teamsModel.findByPk(id);
+  static async getById(id: number): Promise<ITeams | void> {
+    const team = await Teams.findByPk(id);
     if (team) return team;
     throw new ErrorHandler(401, 'Team not Found');
-  };
+  }
 }

@@ -6,10 +6,8 @@ import ErrorHandler from '../utils/ErrorHandler';
 import IGoalsToUpdate from '../interfaces/IGoalsToUpdate';
 
 export default class MatchesService {
-  constructor(private _matchesModel = Matches, private _teamsModel = Teams) {}
-
-  getAll = async (): Promise<IMatches[] | void> => {
-    const matches = await this._matchesModel.findAll({
+  static async getAll(): Promise<IMatches[] | void> {
+    const matches = await Matches.findAll({
       include: [
         {
           model: Teams,
@@ -24,10 +22,13 @@ export default class MatchesService {
       ],
     });
     return matches;
-  };
+  }
 
-  matchesInProgress = async (progress: boolean): Promise<IMatches[] | void> => {
-    const filteredMatches = await this._matchesModel.findAll({
+  //  prettier-ignore
+  static async matchesInProgress(
+    progress: boolean,
+  ): Promise<IMatches[] | void> {
+    const filteredMatches = await Matches.findAll({
       where: { inProgress: progress },
       include: [
         {
@@ -43,9 +44,9 @@ export default class MatchesService {
       ],
     });
     return filteredMatches;
-  };
+  }
 
-  insertMatch = async (match: IMatches): Promise<IMatches> => {
+  static async insertMatch(match: IMatches): Promise<IMatches> {
     const { homeTeamId, awayTeamId } = match;
     if (homeTeamId === awayTeamId) {
       const { status, message } = sameTeamError;
@@ -53,16 +54,20 @@ export default class MatchesService {
     }
 
     await this.checkTeamsInDB(+match.homeTeamId, +match.awayTeamId);
-    const matchInserted = await this._matchesModel.create({
+    const matchInserted = await Matches.create({
       ...match,
       inProgress: true,
     });
     return matchInserted;
-  };
+  }
 
-  async checkTeamsInDB(homeTeam: number, awayTeam: number): Promise<boolean> {
-    const homeTeamCheck = await this._teamsModel.findByPk(homeTeam);
-    const awaitTeamCheck = await this._teamsModel.findByPk(awayTeam);
+  //  prettier-ignore
+  static async checkTeamsInDB(
+    homeTeam: number,
+    awayTeam: number,
+  ): Promise<boolean> {
+    const homeTeamCheck = await Teams.findByPk(homeTeam);
+    const awaitTeamCheck = await Teams.findByPk(awayTeam);
     if (homeTeamCheck && awaitTeamCheck) {
       return true;
     }
@@ -70,18 +75,18 @@ export default class MatchesService {
     throw new ErrorHandler(status, message);
   }
 
-  finishedMatch = async (id: number): Promise<void> => {
-    await this._matchesModel.update({ inProgress: false }, { where: { id } });
-  };
+  static async finishedMatch(id: number): Promise<void> {
+    await Matches.update({ inProgress: false }, { where: { id } });
+  }
 
   //  prettier-ignore
-  updateGoals = async (id: number, goalsToUpdate: IGoalsToUpdate) => {
-    await this._matchesModel.update(
+  static async updateGoals(id: number, goalsToUpdate: IGoalsToUpdate) {
+    await Matches.update(
       {
         homeTeamGoals: goalsToUpdate.homeTeamGoals,
         awayTeamGoals: goalsToUpdate.awayTeamGoals,
       },
       { where: { id } },
     );
-  };
+  }
 }
