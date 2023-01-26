@@ -9,9 +9,10 @@ import {
 import sequelize from '.';
 import Teams from './Teams';
 
+// prettier-ignore
 export default class Matches extends Model<
-  InferAttributes<Matches>,
-  InferCreationAttributes<Matches>
+InferAttributes<Matches>,
+InferCreationAttributes<Matches>
 > {
   declare id: CreationOptional<number>;
   declare homeTeamId: number;
@@ -23,6 +24,8 @@ export default class Matches extends Model<
     [key: string]: Association<Model<Matches, Teams>>;
   };
 }
+
+// prettier-ignore
 Matches.init(
   {
     id: {
