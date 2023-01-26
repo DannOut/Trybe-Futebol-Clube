@@ -9,7 +9,6 @@ export default class MatchesController {
       const matchesFiltered = await MatchesService.matchesInProgress(
         progress as unknown as boolean,
       );
-      console.log('matchesFiltered :>> ', matchesFiltered);
       return res.status(200).json(matchesFiltered);
     }
     const allMatches = await MatchesService.getAll();

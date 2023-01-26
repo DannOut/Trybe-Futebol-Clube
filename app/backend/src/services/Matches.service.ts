@@ -6,7 +6,7 @@ import ErrorHandler from '../utils/ErrorHandler';
 import IGoalsToUpdate from '../interfaces/IGoalsToUpdate';
 
 export default class MatchesService {
-  static async getAll(): Promise<IMatches[] | void> {
+  static async getAll(): Promise<Matches[]> {
     const matches = await Matches.findAll({
       include: [
         {
@@ -27,7 +27,7 @@ export default class MatchesService {
   //  prettier-ignore
   static async matchesInProgress(
     progress: boolean,
-  ): Promise<IMatches[] | void> {
+  ): Promise<Matches[]> {
     const filteredMatches = await Matches.findAll({
       where: { inProgress: progress },
       include: [
@@ -58,7 +58,7 @@ export default class MatchesService {
       ...match,
       inProgress: true,
     });
-    return matchInserted;
+    return matchInserted as unknown as IMatches;
   }
 
   //  prettier-ignore
