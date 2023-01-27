@@ -80,44 +80,44 @@ export const orderTeams = (leaderboard: ILeaderboard[]) => leaderboard.sort(
 );
 
 //  prettier-ignore
-export const mergeLeaderboards = async (home: ILeaderboard[], away: ILeaderboard[]):
-Promise<ILeaderboard[]> => {
-  const arraysMerged = home.map((team, index) => ({
-    name: team.name,
-    totalPoints: team.totalPoints + away[index].totalPoints,
-    totalGames: team.totalGames + away[index].totalGames,
-    totalVictories: team.totalVictories + away[index].totalVictories,
-    totalDraws: team.totalDraws + away[index].totalDraws,
-    totalLosses: team.totalLosses + away[index].totalLosses,
-    goalsFavor: team.goalsFavor + away[index].goalsFavor,
-    goalsOwn: team.goalsOwn + away[index].goalsOwn,
-    get goalsBalance(): number {
-      return this.goalsFavor - this.goalsOwn;
-    },
-    get efficiency() {
-      return ((this.totalPoints / (this.totalGames * 3)) * 100).toFixed(2);
-    },
-  }));
-  return arraysMerged;
-};
-
-// export const reduceteste = async (home: ILeaderboard[], away: ILeaderboard[]):
+// export const mergeLeaderboards = async (home: ILeaderboard[], away: ILeaderboard[]):
 // Promise<ILeaderboard[]> => {
-//   const arraysMerged = home.map((team, index) => {
-//     const mergedTeam: ILeaderboard = Object.entries(team).reduce((acc, [key, value]) => ({
-//       ...acc,
-//       [key]: typeof value === 'number' ? value + away[index][key] : value,
-//     }), {}) as Partial<ILeaderboard>;
-//     return { ...mergedTeam,
-//       get goalsBalance(): number {
-//         return mergedTeam.goalsFavor - mergedTeam.goalsOwn;
-//       },
-//       get efficiency() {
-//         return (
-//           (mergedTeam.totalPoints / (mergedTeam.totalGames * 3)) * 100
-//         ).toFixed(2);
-//       },
-//     }as;
-//   });
+//   const arraysMerged = home.map((team, index) => ({
+//     name: team.name,
+//     totalPoints: team.totalPoints + away[index].totalPoints,
+//     totalGames: team.totalGames + away[index].totalGames,
+//     totalVictories: team.totalVictories + away[index].totalVictories,
+//     totalDraws: team.totalDraws + away[index].totalDraws,
+//     totalLosses: team.totalLosses + away[index].totalLosses,
+//     goalsFavor: team.goalsFavor + away[index].goalsFavor,
+//     goalsOwn: team.goalsOwn + away[index].goalsOwn,
+//     get goalsBalance(): number {
+//       return this.goalsFavor - this.goalsOwn;
+//     },
+//     get efficiency() {
+//       return ((this.totalPoints / (this.totalGames * 3)) * 100).toFixed(2);
+//     },
+//   }));
 //   return arraysMerged;
 // };
+
+export const mergeLeaderboards = (
+  home: ILeaderboard[],
+  away: ILeaderboard[]
+): ILeaderboard[] => home.map((team, index) => {
+    const mergedTeam = Object.entries(team).reduce(
+      (acc, [key, value]: [string, string | number]) => ({
+        ...acc,
+        [key]:
+          typeof value === 'number'
+            ? value + Number(away[index][key as keyof ILeaderboard])
+            : value,
+      }),
+      away[index]
+    );
+    return {
+      ...mergedTeam,
+      get goalsBalance(): number { return mergedTeam.goalsFavor - mergedTeam.goalsOwn;},
+      get efficiency() { return ((mergedTeam.totalPoints / (mergedTeam.totalGames * 3)) * 100).toFixed(2); },
+    } as ILeaderboard;
+  });
