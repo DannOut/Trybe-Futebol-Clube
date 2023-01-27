@@ -1,4 +1,4 @@
-import * as bycrypt from 'bcryptjs';
+import * as bcryptjs from 'bcryptjs';
 import ILogin from '../interfaces/ILogin';
 import User from '../database/models/User';
 import generateToken from '../utils/AuthService';
@@ -13,7 +13,7 @@ export default class UserService {
     const { email, password } = body;
     const userExists = await this._userModel.findOne({ where: { email } });
     // checking if bycrypt is working
-    if (userExists && bycrypt.compareSync(password, userExists.password)) {
+    if (userExists && bcryptjs.compareSync(password, userExists.password)) {
       const newToken = generateToken(body);
       return newToken;
     }
