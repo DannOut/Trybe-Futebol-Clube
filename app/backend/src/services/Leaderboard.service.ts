@@ -14,6 +14,7 @@ import {
   getAwayGoalsFavor,
   getAwayGoalsOwn,
   mergeLeaderboards,
+  // reduceteste,
 } from '../utils/Helpers';
 import MatchesService from './Matches.service';
 import TeamsService from './Teams.service';
@@ -90,6 +91,9 @@ export default class LeaderboardService {
   static async getAllLeaderboard(): Promise<ILeaderboard[]> {
     const arrayHome = await this.getAllHomeLeaderboard();
     const arrayAway = await this.getAllAwayLeaderboard();
+
+    // const teste2 = await reduceteste(arrayHome, arrayAway);
+    // console.log(teste2);
 
     const mergedArrays = mergeLeaderboards(arrayHome, arrayAway);
     return mergedArrays;

@@ -100,3 +100,24 @@ Promise<ILeaderboard[]> => {
   }));
   return arraysMerged;
 };
+
+// export const reduceteste = async (home: ILeaderboard[], away: ILeaderboard[]):
+// Promise<ILeaderboard[]> => {
+//   const arraysMerged = home.map((team, index) => {
+//     const mergedTeam: ILeaderboard = Object.entries(team).reduce((acc, [key, value]) => ({
+//       ...acc,
+//       [key]: typeof value === 'number' ? value + away[index][key] : value,
+//     }), {}) as Partial<ILeaderboard>;
+//     return { ...mergedTeam,
+//       get goalsBalance(): number {
+//         return mergedTeam.goalsFavor - mergedTeam.goalsOwn;
+//       },
+//       get efficiency() {
+//         return (
+//           (mergedTeam.totalPoints / (mergedTeam.totalGames * 3)) * 100
+//         ).toFixed(2);
+//       },
+//     }as;
+//   });
+//   return arraysMerged;
+// };
