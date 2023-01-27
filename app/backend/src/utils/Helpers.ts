@@ -78,3 +78,25 @@ export const orderTeams = (leaderboard: ILeaderboard[]) => leaderboard.sort(
       || b.goalsFavor - a.goalsFavor
       || b.goalsOwn - a.goalsOwn,
 );
+
+//  prettier-ignore
+export const mergeLeaderboards = async (home: ILeaderboard[], away: ILeaderboard[]):
+Promise<ILeaderboard[]> => {
+  const arraysMerged = home.map((team, index) => ({
+    name: team.name,
+    totalPoints: team.totalPoints + away[index].totalPoints,
+    totalGames: team.totalGames + away[index].totalGames,
+    totalVictories: team.totalVictories + away[index].totalVictories,
+    totalDraws: team.totalDraws + away[index].totalDraws,
+    totalLosses: team.totalLosses + away[index].totalLosses,
+    goalsFavor: team.goalsFavor + away[index].goalsFavor,
+    goalsOwn: team.goalsOwn + away[index].goalsOwn,
+    get goalsBalance(): number {
+      return this.goalsFavor - this.goalsOwn;
+    },
+    get efficiency() {
+      return ((this.totalPoints / (this.totalGames * 3)) * 100).toFixed(2);
+    },
+  }));
+  return arraysMerged;
+};

@@ -8,12 +8,12 @@ import {
   getHomeLosses,
   getHomePoints,
   getHomeWins,
-  orderTeams,
   getAwayPoints,
   getAwayWins,
   getAwayLosses,
   getAwayGoalsFavor,
   getAwayGoalsOwn,
+  mergeLeaderboards,
 } from '../utils/Helpers';
 import MatchesService from './Matches.service';
 import TeamsService from './Teams.service';
@@ -33,6 +33,7 @@ export default class LeaderboardService {
     );
   }
 
+  // prettier-ignore
   static async findAllAwayTeamsMatches(id: number): Promise<IMatches[]> {
     return (await this.matchesNotInProgress()).filter(
       (val) => val.awayTeamId === id,
@@ -62,7 +63,7 @@ export default class LeaderboardService {
       get goalsBalance(): number { return this.goalsFavor - this.goalsOwn; },
       get efficiency() { return ((this.totalPoints / (this.totalGames * 3)) * 100).toFixed(2); },
     }));
-    return orderTeams(infoTeams);
+    return infoTeams;
   }
 
   // prettier-ignore
@@ -83,20 +84,14 @@ export default class LeaderboardService {
       get goalsBalance(): number { return this.goalsFavor - this.goalsOwn; },
       get efficiency() { return ((this.totalPoints / (this.totalGames * 3)) * 100).toFixed(2); },
     }));
-    return orderTeams(infoTeams);
+    return infoTeams;
+  }
+
+  static async getAllLeaderboard(): Promise<ILeaderboard[]> {
+    const arrayHome = await this.getAllHomeLeaderboard();
+    const arrayAway = await this.getAllAwayLeaderboard();
+
+    const mergedArrays = mergeLeaderboards(arrayHome, arrayAway);
+    return mergedArrays;
   }
 }
-
-// LeaderboardService.getAllHomeLeaderboard();
-/*   {
-    "name": "Santos",
-    "totalPoints": 9,
-    "totalGames": 3,
-    "totalVictories": 3,
-    "totalDraws": 0,
-    "totalLosses": 0,
-    "goalsFavor": 9,
-    "goalsOwn": 3,
-    "goalsBalance": 6,
-    "efficiency": "100.00"
-  }, */
