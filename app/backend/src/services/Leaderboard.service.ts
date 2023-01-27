@@ -15,7 +15,7 @@ import {
   getAwayGoalsOwn,
   mergeLeaderboards,
   // reduceteste,
-} from '../utils/Helpers';
+} from '../tests/Helpers';
 import MatchesService from './Matches.service';
 import TeamsService from './Teams.service';
 

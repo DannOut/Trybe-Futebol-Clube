@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { orderTeams } from '../utils/Helpers';
+import { orderTeams } from '../tests/Helpers';
 import LeaderboardService from '../services/Leaderboard.service';
 
 export default class LeaderboardController {
