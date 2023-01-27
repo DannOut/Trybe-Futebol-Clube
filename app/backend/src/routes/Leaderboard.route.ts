@@ -3,8 +3,9 @@ import LeaderboardController from '../controllers/Leaderboard.controller';
 
 const router = express.Router();
 
-const matchesController = new LeaderboardController();
+const leaderBoardController = new LeaderboardController();
 
-router.get('/home', matchesController.getAllHome);
+router.get('/home', leaderBoardController.getAllLeaderboard);
+router.get('/away', leaderBoardController.getAllLeaderboard);
 
 export default router;

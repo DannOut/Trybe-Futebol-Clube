@@ -15,18 +15,18 @@ import IMatches from '../interfaces/IMatches';
   }, */
 
 //* MODELOS PARA RETORNAR
-export const getTotalPoints = (acc: number, curr: IMatches): number => {
+export const getHomePoints = (acc: number, curr: IMatches): number => {
   if (curr.homeTeamGoals > curr.awayTeamGoals) return acc + 3;
   if (curr.homeTeamGoals === curr.awayTeamGoals) return acc + 1;
   return acc;
 };
 
-export const getWins = (acc: number, curr: IMatches): number => {
+export const getHomeWins = (acc: number, curr: IMatches): number => {
   if (curr.homeTeamGoals > curr.awayTeamGoals) return acc + 1;
   return acc;
 };
 
-export const getDraws = (acc: number, curr: IMatches): number => {
+export const getDrawsHome = (acc: number, curr: IMatches): number => {
   if (curr.homeTeamGoals === curr.awayTeamGoals) return acc + 1;
   return acc;
 };
@@ -42,6 +42,34 @@ export const getHomeGoalsFavor = (acc: number, curr: IMatches): number =>
 export const getHomeGoalsOwn = (acc: number, curr: IMatches): number =>
   curr.awayTeamGoals + acc;
 
+export const getAwayPoints = (acc: number, curr: IMatches): number => {
+  if (curr.awayTeamGoals > curr.homeTeamGoals) return acc + 3;
+  if (curr.awayTeamGoals === curr.homeTeamGoals) return acc + 1;
+  return acc;
+};
+
+export const getAwayWins = (acc: number, curr: IMatches): number => {
+  if (curr.awayTeamGoals > curr.homeTeamGoals) return acc + 1;
+  return acc;
+};
+
+export const getAwayLosses = (acc: number, curr: IMatches): number => {
+  if (curr.homeTeamGoals > curr.awayTeamGoals) return acc + 1;
+  return acc;
+};
+
+export const getAwayGoalsFavor = (acc: number, curr: IMatches): number =>
+  curr.awayTeamGoals + acc;
+
+export const getAwayGoalsOwn = (acc: number, curr: IMatches): number =>
+  curr.homeTeamGoals + acc;
+
+export const getDrawsAway = (acc: number, curr: IMatches): number => {
+  if (curr.awayTeamGoals === curr.homeTeamGoals) return acc + 1;
+  return acc;
+};
+
+// prettier-ignore
 export const orderTeams = (leaderboard: ILeaderboard[]) => leaderboard.sort(
   (a, b) =>
     b.totalPoints - a.totalPoints
