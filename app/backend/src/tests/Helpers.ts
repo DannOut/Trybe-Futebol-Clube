@@ -79,6 +79,28 @@ export const orderTeams = (leaderboard: ILeaderboard[]) => leaderboard.sort(
       || b.goalsOwn - a.goalsOwn,
 );
 
+export const mergeLeaderboards = (
+  home: ILeaderboard[],
+  away: ILeaderboard[]
+): ILeaderboard[] => home.map((team, index) => {
+    const mergedTeam = Object.entries(team).reduce(
+      (acc, [key, value]: [string, string | number]) => ({
+        ...acc,
+        [key]:
+          typeof value === 'number'
+            ? value + Number(away[index][key as keyof ILeaderboard])
+            : value,
+      }),
+      away[index]
+    );
+    return {
+      ...mergedTeam,
+      get goalsBalance(): number { return mergedTeam.goalsFavor - mergedTeam.goalsOwn;},
+      get efficiency() { return ((mergedTeam.totalPoints / (mergedTeam.totalGames * 3)) * 100).toFixed(2); },
+    } as ILeaderboard;
+  });
+
+
 //  prettier-ignore
 // export const mergeLeaderboards = async (home: ILeaderboard[], away: ILeaderboard[]):
 // Promise<ILeaderboard[]> => {
@@ -100,24 +122,3 @@ export const orderTeams = (leaderboard: ILeaderboard[]) => leaderboard.sort(
 //   }));
 //   return arraysMerged;
 // };
-
-export const mergeLeaderboards = (
-  home: ILeaderboard[],
-  away: ILeaderboard[]
-): ILeaderboard[] => home.map((team, index) => {
-    const mergedTeam = Object.entries(team).reduce(
-      (acc, [key, value]: [string, string | number]) => ({
-        ...acc,
-        [key]:
-          typeof value === 'number'
-            ? value + Number(away[index][key as keyof ILeaderboard])
-            : value,
-      }),
-      away[index]
-    );
-    return {
-      ...mergedTeam,
-      get goalsBalance(): number { return mergedTeam.goalsFavor - mergedTeam.goalsOwn;},
-      get efficiency() { return ((mergedTeam.totalPoints / (mergedTeam.totalGames * 3)) * 100).toFixed(2); },
-    } as ILeaderboard;
-  });
